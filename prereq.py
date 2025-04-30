@@ -56,21 +56,21 @@ WantedBy=multi-user.target
 """
   start_file = os.path.join(ROOT, 'start.py')
   content = content % (ROOT, sys.executable, start_file)
-  with open(os.path.join(ROOT, 'vsb.service'), 'w', encoding='utf-8') as f:
+  with open(os.path.join(ROOT, 'srvb.service'), 'w', encoding='utf-8') as f:
     f.write(content)
   print("Service file successfully created!")
 
 
 services_files = {
-  generate_service_file: os.path.join(ROOT, 'vsb.service'),
-  generate_nginx_conf: os.path.join(ROOT, 'vsb.conf')
+  generate_service_file: os.path.join(ROOT, 'srvb.service'),
+  generate_nginx_conf: os.path.join(ROOT, 'srvb.conf')
 }
 folders = [
-  os.path.join(ROOT, 'downloads'), os.path.join(ROOT, 'storage'), os.path.join(ROOT, 'logs')
+  os.path.join(ROOT, 'clients'), os.path.join(ROOT, 'logs')
 ]
 system_directories = {
-  os.path.join(ROOT, 'vsb.service'): '/etc/systemd/system/',
-  os.path.join(ROOT, 'vsb.conf'): '/etc/nginx/conf.d/',
+  os.path.join(ROOT, 'srvb.service'): '/etc/systemd/system/',
+  # os.path.join(ROOT, 'vsb.conf'): '/etc/nginx/conf.d/',
 }
 
 def check_service_files():
