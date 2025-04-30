@@ -16,8 +16,7 @@ def create_config(ip, client_name):
   with open(os.path.join(CONFIG, 'sample.config'), 'r', encoding='utf-8') as f:
     sample = f.read()
 
-  # credentials['private_key'] = subprocess.check_output(['wg', 'genkey']).decode().strip()
-  credentials['private_key'] = 'sBSFaL2f9mH5BWvRfypM3IfBGoseBtC8zGrB63Te0X8='
+  credentials['private_key'] = subprocess.check_output(['wg', 'genkey']).decode().strip()
   credentials['client_ip'] = ip
   config = sample.format(**credentials)
   
