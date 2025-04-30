@@ -1,0 +1,11 @@
+.venv
+__pycache__
+*.log
+test*
+latest*.json
+.env
+*.pickle
+config.yaml
+*.conf
+*_secret.yaml
+*.db

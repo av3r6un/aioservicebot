@@ -1,0 +1,2 @@
+commands:
+  conf: 'Generate WG configuration'
