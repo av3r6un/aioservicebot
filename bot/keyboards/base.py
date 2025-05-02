@@ -58,10 +58,11 @@ class BaseKeyboard:
   messages: ReceivedMessages = None
   service_messages: dict = {}
   prefix = None
+  filter = None
 
-  def __init__(self, prefix, f):
+  def __init__(self, prefix):
     self.prefix = prefix
-    self.F = f.filter()
+    self.filter = F.data.startswith(f'{prefix}:')
     self.messages = ReceivedMessages()
     self.service_messages = {}
 

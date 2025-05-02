@@ -50,10 +50,11 @@ async def new_handler(m: Message, session: AsyncSession):
   except Exception as e:
     raise e
 
-@main.callback_query(qrr.F)
-async def qr_handler(q: CallbackQuery, session: AsyncSession, data: QRFilter):
+@main.callback_query(qrr.filter)
+async def qr_handler(q: CallbackQuery, session: AsyncSession):
+  action = qrr.extract_action(q.data)
   try:
-    if data.action == 'showQR':
+    if action == 'showQR':
       user = await BotUser.get_one(session, id=q.from_user.id)
       qr_path = f'{user.config}/u{q.from_user.id}.png'
       await q.message.answer_photo(FSInputFile(qr_path, 'wg_qr.png'))
