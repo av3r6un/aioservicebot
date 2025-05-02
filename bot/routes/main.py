@@ -51,12 +51,15 @@ async def new_handler(m: Message, session: AsyncSession):
 
 @main.callback_query(qrr.filter)
 async def qr_handler(q: CallbackQuery, session: AsyncSession):
+  from bot import messages
+  messages.lang = q.from_user.language_code
+  message = messages['your_png']
   action = qrr.extract_action(q.data)
   try:
     if action == 'showQR':
       user = await BotUser.get_one(session, id=q.from_user.id)
       qr_path = f'{user.config}/u{q.from_user.id}.png'
-      await q.message.answer_photo(FSInputFile(qr_path, 'wg_qr.png'))
+      await q.message.answer_photo(FSInputFile(qr_path, 'wg_qr.png'), **message.c)
       await qrr.service_messages[q.from_user.id].delete_reply_markup()
       qrr.service_messages.pop(q.from_user.id)
   except Exception as e:
