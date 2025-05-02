@@ -20,3 +20,7 @@ successfully_created:
       ||This message is protected from forwarding||
   protect_content: yes
   parse_mode: 'MarkdownV2'
+not_created:
+  text:
+    ru: Произошла ошибка при генерации qr-кода.
+    en: An issue occured while creating qr-code.

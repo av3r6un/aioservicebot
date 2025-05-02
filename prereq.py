@@ -35,7 +35,7 @@ server {
   location_ = os.getenv('WH_PATH')
 
   content = content % (srv_addr_, domain_, domain_, domain_, location_)
-  with open(os.path.join(ROOT, 'vsb.conf'), 'w', encoding='utf-8') as f:
+  with open(os.path.join(ROOT, 'srvb.conf'), 'w', encoding='utf-8') as f:
     f.write(content)
   print("NGINX conf file successfully created!")
 

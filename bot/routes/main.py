@@ -35,16 +35,19 @@ async def new_handler(m: Message, session: AsyncSession):
     if not user.assigned_addr:
       addresses = await BotUser.get_column_values(session, 'assigned_addr')
       ip = assign_next_ip(addresses)
-      config = create_config(ip, m.from_user.id)
+      created, config = create_config(ip, m.from_user.id)
       await user.update(session, assigned_addr=ip, config=config)
     else:
       config = user.config
-    await m.answer_document(FSInputFile(config, 'wg_quick.conf'), **message.c)
+    if created:
+      await m.answer_photo(FSInputFile(config, 'wg_quick.conf'), **message.c)
+    else:
+      await m.answer(**messages['not_created'].m)
   except Exception as e:
     raise e
 
-@main.message(F)
-async def effect_handler(m: Message):
-  effect_id = m.effect_id
-  print(effect_id)
-  return await m.answer(text=m.text, message_effect_id=effect_id)
+# @main.message(F)
+# async def effect_handler(m: Message):
+#   effect_id = m.effect_id
+#   print(effect_id)
+#   return await m.answer(text=m.text, message_effect_id=effect_id)

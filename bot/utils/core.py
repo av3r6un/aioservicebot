@@ -9,21 +9,27 @@ CONFIG = os.path.join(ROOT, 'config')
 CLIENT_DIR = os.path.join(ROOT, 'clients')
 BASE_IP = '10.'
 
-def create_config(ip, client_name):
+def create_config_OLD(ip, client_name):
   with open(os.path.join(CONFIG, 'client_secret.yaml'), 'r', encoding='utf-8') as sf:
     credentials = safe_load(sf)
   
   with open(os.path.join(CONFIG, 'sample.config'), 'r', encoding='utf-8') as f:
     sample = f.read()
 
-  credentials['private_key'] = subprocess.check_output(['wg', 'genkey']).decode().strip()
   credentials['client_ip'] = ip
   config = sample.format(**credentials)
   
   with open(os.path.join(CLIENT_DIR, f'u{client_name}.conf'), 'w', encoding='utf-8') as wf:
     wf.write(config)
-  
-  return os.path.join(CLIENT_DIR, f'u{client_name}.conf')
+
+  subprocess.call(['qrencode', '-t', 'ansiutf8', '<', os.path.join(CLIENT_DIR, f'u{client_name}.conf'), '-o', os.path.join(CLIENT_DIR, f'u{client_name}.png')])
+
+  return os.path.exists(CLIENT_DIR, f'u{client_name}.png'), os.path.join(CLIENT_DIR, f'u{client_name}.png')
+
+
+def create_config(ip, client_name):
+  result = subprocess.check_output([os.path.join(CONFIG, 'add_client.sh'), ip, client_name])
+  return os.path.exists(os.path.join(CLIENT_DIR, client_name, f'{client_name}.png')), result.decode().strip()
 
 
 def assign_next_ip(existing):
@@ -36,6 +42,6 @@ def assign_next_ip(existing):
     except AddressValueError:
       continue
   
-  for i in range(int(IPv4Address('10.0.0.2')), int(IPv4Address('10.255.255.254'))):
+  for i in range(int(IPv4Address('10.8.0.2')), int(IPv4Address('10.8.255.254'))):
     if i not in used: return str(IPv4Address(i))
   raise ValueError('No available IP addresses left.')
