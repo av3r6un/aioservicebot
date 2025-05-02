@@ -45,14 +45,12 @@ async def new_handler(m: Message, session: AsyncSession):
         await m.answer(**messages['not_created'].m)
     else:
       im = await m.answer_document(FSInputFile(f'{user.config}/wg_connection.zip'), reply_markup=qrr.kb)
-      print(qrr.kb.model_dump())
       qrr.add_instance(m.chat.id, im, m, session)
   except Exception as e:
     raise e
 
 @main.callback_query(qrr.F.filter())
-async def qr_handler(q: CallbackQuery, data: BaseCallbackFilter):
-  print(q.data)
+async def qr_handler(q: CallbackQuery, data):
   try:
     if data.action == 'showQR':
       user = await BotUser.get_one(qrr.instance, id=q.from_user.id)

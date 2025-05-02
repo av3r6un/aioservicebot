@@ -1,4 +1,11 @@
+from aiogram.filters.callback_data import CallbackData
+from typing import Optional
 from .base import BaseKeyboard
+
+
+class QRFilter(CallbackData, prefix='qrr'):
+  action: str
+  value: Optional[str] = None
 
 
 class QRRequest(BaseKeyboard):
@@ -7,7 +14,7 @@ class QRRequest(BaseKeyboard):
   ]
 
   def __init__(self) -> None:
-    super().__init__('qrr_')
+    super().__init__('qrr_', QRFilter())
     self.kb = self.create_kb(self.buttons, row_width=1)
 
   def add_instance(self, chat_id, service, original, instance):
