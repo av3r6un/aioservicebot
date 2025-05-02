@@ -14,7 +14,7 @@ class QRRequest(BaseKeyboard):
   ]
 
   def __init__(self) -> None:
-    super().__init__('qrr_', QRFilter)
+    super().__init__('qrr', QRFilter)
     self.kb = self.create_kb(self.buttons, row_width=1)
 
   def add_instance(self, chat_id, service, original, instance):

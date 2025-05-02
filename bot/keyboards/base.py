@@ -61,13 +61,13 @@ class BaseKeyboard:
 
   def __init__(self, prefix, f):
     self.prefix = prefix
-    self.F = f
+    self.F = f.filter()
     self.messages = ReceivedMessages()
     self.service_messages = {}
 
   def create_kb(self, buttons_info, row_width=1) -> InlineKeyboardMarkup:
     buttons = [
-      InlineKeyboardButton(text=button['name'], callback_data=f'{self.prefix}{button["callback"]}')
+      InlineKeyboardButton(text=button['name'], callback_data=f'{self.prefix}:{button["callback"]}')
       for button in buttons_info
     ]
     return InlineKeyboardMarkup(inline_keyboard=[buttons], row_width=row_width)
