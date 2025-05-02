@@ -41,19 +41,19 @@ async def new_handler(m: Message, session: AsyncSession):
       if created:
         im = await m.answer_document(FSInputFile(path), reply_markup=qrr.kb, **message.c)
         qrr.add_instance(m.chat.id, im, m, None)
+        return
       else:
         await m.answer(**messages['not_created'].m)
     else:
-      config = user.config
-      im = await m.answer_document(FSInputFile(f'{config}/wg_connection.zip'), reply_markup=qrr.kb)
+      im = await m.answer_document(FSInputFile(f'{user.config}/wg_connection.zip'), reply_markup=qrr.kb)
       qrr.add_instance(m.chat.id, im, m, None)
-      return
   except Exception as e:
     raise e
 
 @main.callback_query(qrr.filter)
 async def qr_handler(q: CallbackQuery, session: AsyncSession):
   data = q.data.split('_')[-1]
+  print(data)
   try:
     if data == 'show_qr':
       print('requesting qr')
