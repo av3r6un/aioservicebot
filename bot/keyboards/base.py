@@ -1,6 +1,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from aiogram.filters.callback_data import CallbackData
 from datetime import datetime as dt
-from typing import List
+from typing import List, Optional
 from aiogram import F
 
 
@@ -55,15 +56,23 @@ class ReceivedMessages(List[ReceivedMessage]):
     return [i for i in self if i.chat_id == chat_id][0].message
 
 
+class BaseCallbackFilter(CallbackData):
+  action: str
+  value: Optional[str] = None
+
+  def __init__(self, prefix):
+    super().__init__(prefix=prefix)
+
+
 class BaseKeyboard:
   messages: ReceivedMessages = None
   service_messages: dict = {}
   prefix = None
-  filter = None
+  F: BaseCallbackFilter
 
   def __init__(self, prefix):
     self.prefix = prefix
-    self.filter = F.data.startswith(prefix)
+    self.F = BaseCallbackFilter(prefix)
     self.messages = ReceivedMessages()
     self.service_messages = {}
 

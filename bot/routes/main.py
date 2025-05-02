@@ -1,7 +1,7 @@
 from aiogram.types import Message, FSInputFile, CallbackQuery
+from bot.keyboards import QRRequest, BaseCallbackFilter
 from bot.utils import create_config, assign_next_ip
 from sqlalchemy.ext.asyncio import AsyncSession
-from bot.keyboards import QRRequest
 from aiogram.filters import Command
 from bot.models import BotUser
 from aiogram import Router, F
@@ -50,12 +50,11 @@ async def new_handler(m: Message, session: AsyncSession):
   except Exception as e:
     raise e
 
-@main.callback_query(F.data.startswith('qrr_'))
-async def qr_handler(q: CallbackQuery):
+@main.callback_query(qrr.F.filter())
+async def qr_handler(q: CallbackQuery, data: BaseCallbackFilter):
   print(q.data)
-  data = q.data.split('_')[1]
   try:
-    if data == 'showQR':
+    if data.action == 'showQR':
       user = await BotUser.get_one(qrr.instance, id=q.from_user.id)
       qr_path = f'{user.config}/u{q.from_user.id}.png'
       await q.message.answer_photo(FSInputFile(qr_path, 'wg_qr.png'))
