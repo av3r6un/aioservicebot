@@ -18,7 +18,7 @@ class QRRequest(BaseKeyboard):
     self.messages.add(chat_id, original)
 
   def extract_action(self, data: str):
-    if self.filter in data:
+    if f'{self.prefix}:' in data:
       data = data.replace(self.filter, '')
       return data
     return None
