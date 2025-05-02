@@ -39,6 +39,7 @@ async def new_handler(m: Message, session: AsyncSession):
       await user.update(session, assigned_addr=ip, config=config)
     else:
       config = user.config
+      return await m.answer_photo(FSInputFile(f'{config}/u{m.from_user.id}.png', 'wg_connection.png'))
     if created:
       await m.answer_photo(FSInputFile(qr, 'wg_connection.png'), **message.c)
     else:
