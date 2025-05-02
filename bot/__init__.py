@@ -16,7 +16,7 @@ async def on_startup(bot: Bot) -> None:
   from .utils.engine import create_db
   await bot.delete_webhook(drop_pending_updates=True)
   if sys.platform == 'linux':
-    await bot.set_webhook(f'{settings.BASE_WH_URL}{settings.WH_PATH}', drop_pending_updates=True)
+    await bot.set_webhook(f'{settings.BASE_WH_URL}{settings.WH_PATH}', drop_pending_updates=True, allowed_updates=['message', 'callback_query'])
   await create_db()
   await bot.set_my_commands(commands=settings.COMMANDS)
 
