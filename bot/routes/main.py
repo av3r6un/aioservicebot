@@ -50,7 +50,7 @@ async def new_handler(m: Message, session: AsyncSession):
   except Exception as e:
     raise e
 
-@main.callback_query()
+@main.callback_query(qrr.F)
 async def qr_handler(q: CallbackQuery, session: AsyncSession, data: QRFilter):
   try:
     if data.action == 'showQR':
