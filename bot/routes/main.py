@@ -49,10 +49,10 @@ async def new_handler(m: Message, session: AsyncSession):
   except Exception as e:
     raise e
 
-@main.callback_query(qrr.filter)
+@main.callback_query(F.data.startswith('qrr_'))
 async def qr_handler(q: CallbackQuery):
   print(q.data)
-  data = q.data.split('_')[-1]
+  data = q.data.split('_')[1]
   try:
     if data == 'showQR':
       user = await BotUser.get_one(qrr.instance, id=q.from_user.id)
