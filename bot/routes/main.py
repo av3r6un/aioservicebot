@@ -1,5 +1,5 @@
 from aiogram.types import Message, FSInputFile, CallbackQuery
-from bot.keyboards import QRRequest, BaseCallbackFilter
+from bot.keyboards import QRRequest
 from bot.utils import create_config, assign_next_ip
 from sqlalchemy.ext.asyncio import AsyncSession
 from aiogram.filters import Command
