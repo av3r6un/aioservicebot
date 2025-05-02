@@ -9,27 +9,10 @@ CONFIG = os.path.join(ROOT, 'config')
 CLIENT_DIR = os.path.join(ROOT, 'clients')
 BASE_IP = '10.'
 
-def create_config_OLD(ip, client_name):
-  with open(os.path.join(CONFIG, 'client_secret.yaml'), 'r', encoding='utf-8') as sf:
-    credentials = safe_load(sf)
-  
-  with open(os.path.join(CONFIG, 'sample.config'), 'r', encoding='utf-8') as f:
-    sample = f.read()
-
-  credentials['client_ip'] = ip
-  config = sample.format(**credentials)
-  
-  with open(os.path.join(CLIENT_DIR, f'u{client_name}.conf'), 'w', encoding='utf-8') as wf:
-    wf.write(config)
-
-  subprocess.call(['qrencode', '-t', 'ansiutf8', '<', os.path.join(CLIENT_DIR, f'u{client_name}.conf'), '-o', os.path.join(CLIENT_DIR, f'u{client_name}.png')])
-
-  return os.path.exists(CLIENT_DIR, f'u{client_name}.png'), os.path.join(CLIENT_DIR, f'u{client_name}.png')
-
 
 def create_config(ip, client_name):
   result = subprocess.check_output([os.path.join(CONFIG, 'add_client.sh'), ip, client_name])
-  return os.path.exists(os.path.join(CLIENT_DIR, client_name, f'{client_name}.zip')), os.path.join(CLIENT_DIR, client_name), result.decode().strip()
+  return os.path.exists(os.path.join(CLIENT_DIR, client_name, f'wg_connection.zip')), os.path.join(CLIENT_DIR, client_name), result.decode().strip()
 
 
 def assign_next_ip(existing):

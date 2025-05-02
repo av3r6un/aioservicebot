@@ -56,7 +56,9 @@ async def qr_handler(q: CallbackQuery, session: AsyncSession):
   data = q.data.split('_')[-1]
   try:
     if data == 'show_qr':
+      print('requesting qr')
       user = await BotUser.get_one(session, id=q.from_user.id)
+      print(user)
       qr_path = f'{user.config}/u{q.from_user.id}.png'
       await q.message.answer_photo(FSInputFile(qr_path, 'wg_qr.png'))
       await qrr.service_messages[q.from_user.id].delete_reply_markup()
