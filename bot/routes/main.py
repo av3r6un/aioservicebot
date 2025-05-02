@@ -1,7 +1,8 @@
 from aiogram.types import Message, FSInputFile, CallbackQuery
-from bot.keyboards import QRRequest
 from bot.utils import create_config, assign_next_ip
 from sqlalchemy.ext.asyncio import AsyncSession
+from bot.keyboards.qr_request import QRFilter
+from bot.keyboards import QRRequest
 from aiogram.filters import Command
 from bot.models import BotUser
 from aiogram import Router, F
@@ -40,20 +41,20 @@ async def new_handler(m: Message, session: AsyncSession):
       await user.update(session, assigned_addr=ip, config=config)
       if created:
         im = await m.answer_document(FSInputFile(path), reply_markup=qrr.kb, **message.c)
-        qrr.add_instance(m.chat.id, im, m, session)
+        qrr.add_instance(m.chat.id, im, m, None)
       else:
         await m.answer(**messages['not_created'].m)
     else:
-      im = await m.answer_document(FSInputFile(f'{user.config}/wg_connection.zip'), reply_markup=qrr.kb)
-      qrr.add_instance(m.chat.id, im, m, session)
+      im = await m.answer_document(FSInputFile(f'{user.config}/wg_connection.zip'), reply_markup=qrr.kb, **message.c)
+      qrr.add_instance(m.chat.id, im, m, None)
   except Exception as e:
     raise e
 
 @main.callback_query(qrr.F.filter())
-async def qr_handler(q: CallbackQuery, data):
+async def qr_handler(q: CallbackQuery, session: AsyncSession, data: QRFilter):
   try:
     if data.action == 'showQR':
-      user = await BotUser.get_one(qrr.instance, id=q.from_user.id)
+      user = await BotUser.get_one(session, id=q.from_user.id)
       qr_path = f'{user.config}/u{q.from_user.id}.png'
       await q.message.answer_photo(FSInputFile(qr_path, 'wg_qr.png'))
       await qrr.service_messages[q.from_user.id].delete_reply_markup()
