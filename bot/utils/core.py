@@ -29,7 +29,7 @@ def create_config_OLD(ip, client_name):
 
 def create_config(ip, client_name):
   result = subprocess.check_output([os.path.join(CONFIG, 'add_client.sh'), ip, client_name])
-  return os.path.exists(os.path.join(CLIENT_DIR, client_name, f'{client_name}.png')), result.decode().strip()
+  return os.path.exists(os.path.join(CLIENT_DIR, client_name, f'{client_name}.png')), os.path.join(CLIENT_DIR, client_name), result.decode().strip()
 
 
 def assign_next_ip(existing):
