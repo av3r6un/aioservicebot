@@ -67,7 +67,7 @@ class BaseKeyboard:
     self.messages = ReceivedMessages()
     self.service_messages = {}
 
-  def create_kb(self, buttons_info, row_width=1) -> None:
+  def create_kb(self, buttons_info, row_width=1) -> InlineKeyboardMarkup:
     buttons = [
       InlineKeyboardButton(text=button['name'], callback_data=f'{self.prefix}{button["callback"]}')
       for button in buttons_info
