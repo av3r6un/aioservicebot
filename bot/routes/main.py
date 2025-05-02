@@ -1,7 +1,6 @@
 from aiogram.types import Message, FSInputFile, CallbackQuery
 from bot.utils import create_config, assign_next_ip
 from sqlalchemy.ext.asyncio import AsyncSession
-from bot.keyboards.qr_request import QRFilter
 from bot.keyboards import QRRequest
 from aiogram.filters import Command
 from bot.models import BotUser
