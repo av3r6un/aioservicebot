@@ -10,3 +10,4 @@ config.yaml
 *_secret.yaml
 *.db
 *.sh
+*.service

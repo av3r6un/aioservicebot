@@ -1,12 +1,13 @@
+from aiogram.types import Message, FSInputFile, CallbackQuery
 from bot.utils import create_config, assign_next_ip
-from aiogram.types import Message, FSInputFile
 from sqlalchemy.ext.asyncio import AsyncSession
+from bot.keyboards import QRRequest
 from aiogram.filters import Command
 from bot.models import BotUser
 from aiogram import Router, F
 
 main = Router()
-
+qrr = QRRequest()
 
 @main.message(Command('start'))
 async def welcome(m: Message, session: AsyncSession):
@@ -35,20 +36,30 @@ async def new_handler(m: Message, session: AsyncSession):
     if not user.assigned_addr:
       addresses = await BotUser.get_column_values(session, 'assigned_addr')
       ip = assign_next_ip(addresses)
-      created, config, qr = create_config(ip, f'u{m.from_user.id}')
+      created, config, path = create_config(ip, f'u{m.from_user.id}')
       await user.update(session, assigned_addr=ip, config=config)
+      if created:
+        im = await m.answer_document(FSInputFile(path), reply_markup=qrr.kb, **message.c)
+        qrr.add_instance(m.chat.id, im, m, None)
+      else:
+        await m.answer(**messages['not_created'].m)
     else:
       config = user.config
-      return await m.answer_photo(FSInputFile(f'{config}/u{m.from_user.id}.png', 'wg_connection.png'))
-    if created:
-      await m.answer_photo(FSInputFile(qr, 'wg_connection.png'), **message.c)
-    else:
-      await m.answer(**messages['not_created'].m)
+      im = await m.answer_document(FSInputFile(f'{config}/wg_connection.zip'), reply_markup=qrr.kb)
+      qrr.add_instance(m.chat.id, im, m, None)
+      return
   except Exception as e:
     raise e
 
-# @main.message(F)
-# async def effect_handler(m: Message):
-#   effect_id = m.effect_id
-#   print(effect_id)
-#   return await m.answer(text=m.text, message_effect_id=effect_id)
+@main.callback_query(qrr.filter)
+async def qr_handler(q: CallbackQuery, session: AsyncSession):
+  data = q.data.split('_')[-1]
+  try:
+    if data == 'show_qr':
+      user = await BotUser.get_one(session, id=q.from_user.id)
+      qr_path = f'{user.config}/u{q.from_user.id}.png'
+      await q.message.answer_photo(FSInputFile(qr_path, 'wg_qr.png'))
+      await qrr.service_messages[q.from_user.id].delete_reply_markup()
+      qrr.service_messages.pop(q.from_user.id)
+  except Exception as e:
+    raise e
