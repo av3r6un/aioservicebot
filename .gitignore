@@ -9,3 +9,4 @@ config.yaml
 *.conf
 *_secret.yaml
 *.db
+*.sh
