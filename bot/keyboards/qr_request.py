@@ -3,7 +3,7 @@ from .base import BaseKeyboard
 
 class QRRequest(BaseKeyboard):
   buttons = [
-    { 'name': 'QR-code', 'callback': 'show_qr' }
+    { 'name': 'QR-code', 'callback': 'showQR' }
   ]
 
   def __init__(self) -> None:

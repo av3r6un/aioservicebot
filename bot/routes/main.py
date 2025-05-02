@@ -41,7 +41,6 @@ async def new_handler(m: Message, session: AsyncSession):
       if created:
         im = await m.answer_document(FSInputFile(path), reply_markup=qrr.kb, **message.c)
         qrr.add_instance(m.chat.id, im, m, session)
-        return
       else:
         await m.answer(**messages['not_created'].m)
     else:
@@ -52,13 +51,11 @@ async def new_handler(m: Message, session: AsyncSession):
 
 @main.callback_query(qrr.filter)
 async def qr_handler(q: CallbackQuery):
+  print(q.data)
   data = q.data.split('_')[-1]
-  print(data)
   try:
-    if data == 'show_qr':
-      print('requesting qr')
+    if data == 'showQR':
       user = await BotUser.get_one(qrr.instance, id=q.from_user.id)
-      print(user)
       qr_path = f'{user.config}/u{q.from_user.id}.png'
       await q.message.answer_photo(FSInputFile(qr_path, 'wg_qr.png'))
       await qrr.service_messages[q.from_user.id].delete_reply_markup()
