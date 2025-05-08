@@ -12,7 +12,7 @@ BASE_IP = '10.'
 
 def create_config(ip, client_name):
   result = subprocess.check_output([os.path.join(CONFIG, 'add_client.sh'), ip, client_name])
-  return os.path.exists(os.path.join(CLIENT_DIR, client_name, f'wg_connection.zip')), os.path.join(CLIENT_DIR, client_name), result.decode().strip()
+  return os.path.exists(os.path.join(CLIENT_DIR, client_name, f'wg_connection.zip')), os.path.join(CLIENT_DIR, client_name), os.path.join(CLIENT_DIR, client_name, f'wg_connection.zip')
 
 
 def assign_next_ip(existing):
