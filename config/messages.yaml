@@ -14,14 +14,14 @@ successfully_created:
       Ваш конфигурационный файл успешно создан\.
 
       Чтобы подключить к серверу, используйте официального приложение WireGuard\.
-      [Android](https://play.google.com/store/apps/details?id=com.wireguard.android) \| [iOS](https://itunes.apple.com/us/app/wireguard/id1441195209?ls=1&mt=8) \| [Windows | MacOS | Linux](https://www.wireguard.com/install/)
+      [Android](https://play.google.com/store/apps/details?id=com.wireguard.android) \| [iOS](https://itunes.apple.com/us/app/wireguard/id1441195209?ls=1&mt=8) \| [Windows \| MacOS \| Linux](https://www.wireguard.com/install/)
       
       ||Данное сообщение защищено от пересылки||
     eng: | 
       Your conf file was successfully created\.
 
       To connect to server use official WireGuard app\.
-      [Android](https://play.google.com/store/apps/details?id=com.wireguard.android) \| [iOS](https://itunes.apple.com/us/app/wireguard/id1441195209?ls=1&mt=8) \| [Windows | MacOS | Linux](https://www.wireguard.com/install/)
+      [Android](https://play.google.com/store/apps/details?id=com.wireguard.android) \| [iOS](https://itunes.apple.com/us/app/wireguard/id1441195209?ls=1&mt=8) \| [Windows \| MacOS \| Linux](https://www.wireguard.com/install/)
 
       ||This message is protected from forwarding||
   protect_content: yes
@@ -32,14 +32,14 @@ your_png:
       QR\-код для подключения к серверу\. Его можно использовать 
 
       Отсканируйте данный QR\-код с помощью официального приложения Wireguard на телефоне\.
-      [Android](https://play.google.com/store/apps/details?id=com.wireguard.android) \| [iOS](https://itunes.apple.com/us/app/wireguard/id1441195209?ls=1&mt=8) \| [Windows | MacOS | Linux](https://www.wireguard.com/install/)
+      [Android](https://play.google.com/store/apps/details?id=com.wireguard.android) \| [iOS](https://itunes.apple.com/us/app/wireguard/id1441195209?ls=1&mt=8) \| [Windows \| MacOS \| Linux](https://www.wireguard.com/install/)
 
       ||Данное сообщение защищено от пересылки||
     en: |
       QR\-code to connect to server\.
 
       Scan it using official WireGuard app on your phone\.
-      [Android](https://play.google.com/store/apps/details?id=com.wireguard.android) \| [iOS](https://itunes.apple.com/us/app/wireguard/id1441195209?ls=1&mt=8) \| [Windows | MacOS | Linux](https://www.wireguard.com/install/)
+      [Android](https://play.google.com/store/apps/details?id=com.wireguard.android) \| [iOS](https://itunes.apple.com/us/app/wireguard/id1441195209?ls=1&mt=8) \| [Windows \| MacOS \| Linux](https://www.wireguard.com/install/)
 
       ||This message is protected from forwarding||
   protect_content: yes
