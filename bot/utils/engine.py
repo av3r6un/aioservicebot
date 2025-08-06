@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from bot.models.base import Base
 import os
 
-engine = create_async_engine(os.getenv('DB_URL'), echo=False) # connect_args=dict(connect_timeout=30), pool_recycle=280, pool_pre_ping=True
+engine = create_async_engine(os.getenv('DB_URL'), echo=False, connect_args=dict(connect_timeout=30), pool_recycle=280, pool_pre_ping=True)
 session_maker = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 

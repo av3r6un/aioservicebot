@@ -1,13 +1,15 @@
 from aiogram.types import Message, FSInputFile, CallbackQuery
-from bot.utils import create_config, assign_next_ip
+from bot.utils import create_config, assign_next_ip, make_zip
 from sqlalchemy.ext.asyncio import AsyncSession
+from bot.models import BotUser, Address
 from bot.keyboards import QRRequest
 from aiogram.filters import Command
-from bot.models import BotUser
 from aiogram import Router, F
+import os
 
 main = Router()
 qrr = QRRequest()
+
 
 @main.message(Command('start'))
 async def welcome(m: Message, session: AsyncSession):
@@ -32,19 +34,26 @@ async def new_handler(m: Message, session: AsyncSession):
   try:
     messages.lang = m.from_user.language_code
     message = messages['successfully_created']
-    user = await BotUser.get_one(session, id=m.from_user.id)
-    if not user.assigned_addr:
-      addresses = await BotUser.get_column_values(session, 'assigned_addr')
+    user = await BotUser.first(session, id=m.from_user.id)
+    user_address = Address.first(session, uuid=user.uid)
+    if not user_address:
+      addresses = await Address.get_column_values(session, 'assigned')
       ip = assign_next_ip(addresses)
-      created, config, path = create_config(ip, f'u{m.from_user.id}')
-      await user.update(session, assigned_addr=ip, config=config)
+      created, config = create_config(ip, f'u{m.from_user.id}')
       if created:
+        addr_uid = Address.create_uid(session)
+        addr = Address(addr_uid, user.uid, ip, config)
+        try:
+          path = make_zip(config)
+        except FileNotFoundError:
+          return await m.answer(**messages['not_created'].m)
         im = await m.answer_document(FSInputFile(path), reply_markup=qrr.kb, **message.c)
         qrr.add_instance(m.chat.id, im, m, None)
+        addr.save(session)
       else:
         await m.answer(**messages['not_created'].m)
     else:
-      im = await m.answer_document(FSInputFile(f'{user.config}/wg_connection.zip'), reply_markup=qrr.kb, **message.c)
+      im = await m.answer_document(FSInputFile(f'{user_address.config}/wg_connection.zip'), reply_markup=qrr.kb, **message.c)
       qrr.add_instance(m.chat.id, im, m, None)
   except Exception as e:
     raise e
@@ -57,7 +66,8 @@ async def qr_handler(q: CallbackQuery, session: AsyncSession):
   action = qrr.extract_action(q.data)
   try:
     if action == 'showQR':
-      user = await BotUser.get_one(session, id=q.from_user.id)
+      user = await BotUser.first(session, id=q.from_user.id)
+      address = Address.first(session, uuid=user.uid)
       qr_path = f'{user.config}/u{q.from_user.id}.png'
       await q.message.answer_photo(FSInputFile(qr_path, 'wg_qr.png'), **message.c)
       await qrr.service_messages[q.from_user.id].delete_reply_markup()

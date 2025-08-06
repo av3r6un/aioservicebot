@@ -12,8 +12,6 @@ class BotUser(Base):
   username: Mapped[str] = mapped_column(String(100), nullable=True)
   language_code: Mapped[str] = mapped_column(String(2), nullable=False)
   is_premium: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-  config: Mapped[str] = mapped_column(String(255), nullable=True)
-  assigned_addr: Mapped[str] = mapped_column(String(15), nullable=True)
   
   def __init__(self, uid, id, language_code, is_premium=None, first_name=None, last_name=None, username=None, **kwargs) -> None:
     self.uid = uid
