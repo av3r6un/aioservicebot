@@ -35,13 +35,13 @@ async def new_handler(m: Message, session: AsyncSession):
     messages.lang = m.from_user.language_code
     message = messages['successfully_created']
     user = await BotUser.first(session, id=m.from_user.id)
-    user_address = Address.first(session, uuid=user.uid)
+    user_address = await Address.first(session, uuid=user.uid)
     if not user_address:
       addresses = await Address.get_column_values(session, 'assigned')
       ip = assign_next_ip(addresses)
       created, config = create_config(ip, f'u{m.from_user.id}')
       if created:
-        addr_uid = Address.create_uid(session)
+        addr_uid = await Address.create_uid(session)
         addr = Address(addr_uid, user.uid, ip, config)
         try:
           path = make_zip(config)
@@ -49,7 +49,7 @@ async def new_handler(m: Message, session: AsyncSession):
           return await m.answer(**messages['not_created'].m)
         im = await m.answer_document(FSInputFile(path), reply_markup=qrr.kb, **message.c)
         qrr.add_instance(m.chat.id, im, m, None)
-        addr.save(session)
+        await addr.save(session)
       else:
         await m.answer(**messages['not_created'].m)
     else:
@@ -67,7 +67,7 @@ async def qr_handler(q: CallbackQuery, session: AsyncSession):
   try:
     if action == 'showQR':
       user = await BotUser.first(session, id=q.from_user.id)
-      address = Address.first(session, uuid=user.uid)
+      address = await Address.first(session, uuid=user.uid)
       qr_path = f'{user.config}/u{q.from_user.id}.png'
       await q.message.answer_photo(FSInputFile(qr_path, 'wg_qr.png'), **message.c)
       await qrr.service_messages[q.from_user.id].delete_reply_markup()
