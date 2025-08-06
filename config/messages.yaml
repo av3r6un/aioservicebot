@@ -1,7 +1,7 @@
 welcome:
   text:
     ru: Добро пожаловать, я выдаю конфигурационные файлы для подключения к WireGuard VPN. Используй команду /conf для получения файла.
-    eng: Welcome, I can send u configuration file for WireGuard VPN. Use /conf command to get your conf file.
+    en: Welcome, I can send u configuration file for WireGuard VPN. Use /conf command to get your conf file.
   # possible options
   # parse_mode: "HTML" | "MarkdownV2"
   # disable_notification: yes | no
@@ -17,7 +17,7 @@ successfully_created:
       [Android](https://play.google.com/store/apps/details?id=com.wireguard.android) \| [iOS](https://itunes.apple.com/us/app/wireguard/id1441195209?ls=1&mt=8) \| [Windows \| MacOS \| Linux](https://www.wireguard.com/install/)
       
       ||Данное сообщение защищено от пересылки||
-    eng: | 
+    en: | 
       Your conf file was successfully created\.
 
       To connect to server use official WireGuard app\.
